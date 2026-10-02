@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Mural de Achados e Perdidos{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<header class="topbar">
+    <div class="container nav">
+        <a class="brand" href="{{ url_for('index') }}">
+            <span class="brand-icon">✓</span>
+            <span>
+                <strong>Achados & Perdidos</strong>
+                <small>Mural da comunidade</small>
+            </span>
+        </a>
+        <a class="btn btn-primary" href="{{ url_for('cadastrar') }}">+ Cadastrar item</a>
+    </div>
+</header>
+
+<main class="container main">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="flash {{ category }}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    {% block content %}{% endblock %}
+</main>
+
+<footer>
+    <div class="container">Mural de Achados e Perdidos • Flask + SQLite</div>
+</footer>
+</body>
+</html>

@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block title %}Itens cadastrados{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <div>
+        <span class="eyebrow">MURAL DE ACHADOS E PERDIDOS</span>
+        <h1>Ajude um item a voltar para o seu dono.</h1>
+        <p>Cadastre itens perdidos ou encontrados e encontre informações de contato rapidamente.</p>
+    </div>
+    <a class="btn btn-primary hero-btn" href="{{ url_for('cadastrar') }}">Cadastrar um item</a>
+</section>
+
+<div class="filters">
+    <a class="{{ 'active' if filtro == 'Todos' else '' }}" href="{{ url_for('index', filtro='Todos') }}">Todos</a>
+    <a class="{{ 'active' if filtro == 'Perdidos' else '' }}" href="{{ url_for('index', filtro='Perdidos') }}">Perdidos</a>
+    <a class="{{ 'active' if filtro == 'Encontrados' else '' }}" href="{{ url_for('index', filtro='Encontrados') }}">Encontrados</a>
+</div>
+
+<section class="section-head">
+    <div>
+        <h2>Itens cadastrados</h2>
+        <p>{{ itens|length }} item(ns) nesta visualização.</p>
+    </div>
+</section>
+
+{% if itens %}
+<div class="grid">
+    {% for item in itens %}
+    <article class="item-card {{ 'resolved' if item['resolvido'] else '' }}">
+        <div class="card-top">
+            <span class="tag {{ 'lost' if item['tipo'] == 'Perdido' else 'found' }}">
+                {{ item['tipo'] }}
+            </span>
+            {% if item['resolvido'] %}
+                <span class="status">✓ Resolvido</span>
+            {% endif %}
+        </div>
+
+        <h3>{{ item['nome'] }}</h3>
+        <p class="description">{{ item['descricao'] }}</p>
+
+        <div class="details">
+            <div><span>📍</span><strong>Local</strong><p>{{ item['local'] }}</p></div>
+            <div><span>☎</span><strong>Contato</strong><p>{{ item['contato'] }}</p></div>
+        </div>
+
+        <div class="card-actions">
+            {% if not item['resolvido'] %}
+            <form method="post" action="{{ url_for('resolver', item_id=item['id']) }}">
+                <button class="btn btn-success" type="submit">Marcar como resolvido</button>
+            </form>
+            {% else %}
+            <form method="post" action="{{ url_for('reabrir', item_id=item['id']) }}">
+                <button class="btn btn-secondary" type="submit">Reabrir item</button>
+            </form>
+            {% endif %}
+        </div>
+    </article>
+    {% endfor %}
+</div>
+{% else %}
+<div class="empty">
+    <div class="empty-icon">⌕</div>
+    <h3>Nenhum item encontrado</h3>
+    <p>Ainda não há itens nesta categoria.</p>
+    <a class="btn btn-primary" href="{{ url_for('cadastrar') }}">Cadastrar primeiro item</a>
+</div>
+{% endif %}
+{% endblock %}

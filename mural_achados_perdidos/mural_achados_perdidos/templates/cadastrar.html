@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %}Cadastrar item{% endblock %}
+
+{% block content %}
+<div class="form-page">
+    <div class="form-intro">
+        <a class="back" href="{{ url_for('index') }}">← Voltar para o mural</a>
+        <span class="eyebrow">NOVO CADASTRO</span>
+        <h1>Cadastre um item</h1>
+        <p>Informe os dados abaixo para que outras pessoas possam identificar e devolver o item.</p>
+    </div>
+
+    <form class="form-card" method="post">
+        <div class="field">
+            <label for="tipo">Tipo do item</label>
+            <select id="tipo" name="tipo" required>
+                <option value="">Selecione...</option>
+                <option value="Perdido" {% if request.form.get('tipo') == 'Perdido' %}selected{% endif %}>Perdido</option>
+                <option value="Encontrado" {% if request.form.get('tipo') == 'Encontrado' %}selected{% endif %}>Encontrado</option>
+            </select>
+        </div>
+
+        <div class="field">
+            <label for="nome">Nome do item</label>
+            <input id="nome" name="nome" type="text" placeholder="Ex.: Carteira preta" value="{{ request.form.get('nome', '') }}" required>
+        </div>
+
+        <div class="field">
+            <label for="descricao">Descrição</label>
+            <textarea id="descricao" name="descricao" rows="4" placeholder="Descreva características que ajudem a identificar o item." required>{{ request.form.get('descricao', '') }}</textarea>
+        </div>
+
+        <div class="two-columns">
+            <div class="field">
+                <label for="local">Local</label>
+                <input id="local" name="local" type="text" placeholder="Ex.: Pátio da escola" value="{{ request.form.get('local', '') }}" required>
+            </div>
+
+            <div class="field">
+                <label for="contato">Contato</label>
+                <input id="contato" name="contato" type="text" placeholder="Ex.: (81) 99999-9999" value="{{ request.form.get('contato', '') }}" required>
+            </div>
+        </div>
+
+        <button class="btn btn-primary submit" type="submit">Cadastrar item</button>
+    </form>
+</div>
+{% endblock %}
